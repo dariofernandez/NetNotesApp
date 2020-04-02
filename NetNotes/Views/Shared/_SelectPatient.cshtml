@@ -1,0 +1,56 @@
+﻿@model NetNotes.Models.ViewNotesModel
+
+<table class="table" id="payer">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Patient")
+            </th>
+            <th>
+                @Html.DisplayName("ID")
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PatientSelectList)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    <a href="@Url.Action("SelectedPatient", Model.ControllerInvoking, new { id=item.Value, name=item.Text })" onclick="SetName();">Select</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#payer").DataTable({
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function SetName() {
+            if (window.opener != null && !window.opener.closed) {
+                var txtName = window.opener.document.getElementById("searchPatient");
+                txtName.value = document.getElementById('name').value;
+            }
+            window.close();
+        }
+    </script>
+}
+

@@ -1,0 +1,364 @@
+﻿@model IEnumerable<NetNotes.Models.PatientVisitsBillingModel>
+@using NetNotes.Class
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@{
+    List<NetNotes.Models.PatientVisitsBillingModel> BillingList = new List<NetNotes.Models.PatientVisitsBillingModel>();
+    BillingList = Model.ToList();
+
+    int totalPageQuantity;
+    int currentPage = 1;
+    PagingInfo pagingInfo = new PagingInfo();
+    pagingInfo.CurrentPage = 1;
+    pagingInfo.TotalItems = BillingList.Count();   /*context.Students.Count();*/
+    pagingInfo.ItemsPerPage = 3; // pageSize;
+    ViewBag.Paging = pagingInfo;
+    ViewBag.locpoints = "";
+    ViewBag.GridList = Model;
+    Session["GridList"] = Model;
+
+    foreach (var item in Model)
+    {
+        item.PagingInfo = pagingInfo;
+    }
+}
+
+
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Units)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit_Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Units)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit_Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+
+                </td>
+            </tr>
+        }
+    </table>*@
+
+
+<div class="row">
+    <div id="gridResults" class="col-md-12"></div>
+</div>
+
+<div class="row">
+    <div id="gridResultsFooter" class="col-md-12"></div>
+</div>
+
+<p />
+
+<div class="row">
+    <div id="gridResultsText" class="col-md-12"></div>
+</div>
+
+
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+    </button>*@
+<!-- Modal -->
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        BuildGridItems();
+    });
+
+
+    function getGridItems(iPage = 1) {
+        //alert('getGridItems iPage=' + iPage);
+        BuildGridItems(iPage);
+    }
+
+
+    function editGridItem(iID = 1) {
+        //alert('editGridItems iID=' + iID);
+        //var sUrl = "/ViewNotes/GetOneBillingItemModel";
+        
+        //$.ajax({
+        //    type: "POST",
+        //    data: iID,
+        //    url: sUrl,
+        //    contentType: "application/json"
+        //}).done(function (data) {
+        //    alert('editGridItem data=' + data);
+        //});
+
+        //$('#exampleModal').modal('show');
+    }
+
+
+    function editGridItemPartial(iID = 1) {
+        var intID = iID;
+        //alert('editGridItemPartial iID=' + iID);
+        var sUrl = '@Url.Action("GetBillingPartialViewOneItem", "ViewNotes", new  { iID="replaceToken" }, Request.Url.Scheme)';
+        sUrl = sUrl.replace("replaceToken", iID)
+
+        $.ajax({
+            url: sUrl
+        }).done(function (data) {
+            //alert('editGridItemPartial data=' + data)
+            $("#insertText").html(data);
+            //
+            //$("#partialViewDiv").html(data);
+            $('#viewModalDialog').modal('show');
+            //alert('editGridItemPartial after modal show')
+        });
+    }
+
+
+
+    $('#exampleModal').on('shown.bs.modal', function () {
+        //alert('on shown');
+        setTimeout(function () {
+            //alert('on shown 2 val=' + $('body').find('#nameEdit').val);
+            //$('body').find('#nameEdit').val = "DDDDF";
+            //$('body').find('#nameEdit').focus();
+        }, 1000);
+    })
+
+
+    $("#submit-button").click(function () {
+        // On submit button click close dialog box
+        //$("#createForm").dialog("close");
+        $('#exampleModal').modal('hide');
+
+        //Get values
+        var name = $("#nameEdit").val();
+        //alert('nameEdit val=' + name);
+    });
+
+
+    function BuildGridItems(iPage=1) {
+        var sUrl = "/ViewNotes/GetBillingPartialViewJson";
+        var model = { Name: "Dar", Location: "Fer" };
+        //alert('GetItems=' + JSON.stringify(model));
+
+        var model = '@Html.Raw(Json.Encode(Model))';
+        var data = JSON.parse(model);
+        data = JSON.stringify(data);
+
+        var text = '@Html.PageLinksInternal((PagingInfo)ViewBag.Paging, "paging getGridItems", "getGridItems", "testinHref" )';
+
+        var footer = "";
+        footer += '  <table class="table-hover">';
+        //footer += '     <tr><td>' + text + '</td></tr>';
+        footer += '     <tfoot>';
+        footer += '        <tr>';
+        footer += '            <td colspan="2">';
+        footer += '              <div class="pagingDiv">';
+        footer += text;
+        footer += '              </div >';
+        footer += '            </td>';
+        footer += '        </tr>';
+        footer += '     </tfoot>';
+        footer += '  </table>';
+        footer += '';
+        footer += '<div>';
+
+        $("#gridResultsFooter").html(footer);
+        //$("#gridResultsText").html(text);
+
+        //document.getElementById("gridResultsText").outerHTML = text;
+
+        $.ajax({
+            type: "POST",
+            data: data,
+            url: sUrl,
+            contentType: "application/json"
+        }).done(function (data) {
+            //alert('data=' + data);
+
+            var row = "";
+            row = '<div class="listItemsDiv table-responsive"> ';
+            row += '  <table class="table table-striped table-hover table-bordered">';
+            row += '     <thead class="thead-dark">';
+            row += '     <tr>';
+            row += '        <th>#</th>';
+            row += '        <th>@Html.DisplayNameFor(model => model.Description)</th>';
+            row += '        <th>';
+            row += '                                @Html.DisplayNameFor(model => model.Code)';
+            row += '        </th>';
+            row += '        <th class="text-right">';
+            row += '                                @Html.DisplayNameFor(model => model.Units)';
+            row += '        </th>';
+            row += '        <th class="text-right">';
+            row += '                                @Html.DisplayNameFor(model => model.Unit_Amount)';
+            row += '        </th>';
+            row += '        <th class="text-right">';
+            row += '                                @Html.DisplayNameFor(model => model.Total)';
+            row += '        </th>';
+            row += '     </tr>';
+            row += '     </thead>';
+            row += '     <tbody>';
+
+            iSkipRecs = 0; iFirstLine = 0; iLine = 0; bGotSkipRecs = false; iCountRecs = 0;
+
+            $.each(data, function (index, item) {
+                //row += "<tr><td><input type='checkbox'id='" + item.Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + item.Name + "</td><td>" + item.MobileNumber + "</td></tr>";
+
+                var iCount = item
+                if (bGotSkipRecs == false) {
+                    iItemsPerPage = item.PagingInfo.ItemsPerPage;
+                    iSkipRecs = iItemsPerPage * (iPage - 1);
+                    iFirstLine = iSkipRecs + 1;
+                    bGotSkipRecs = true;
+                }
+                iLine += 1;
+                //alert('iLine=' + iLine + ',  iItemsPerPage=' + iItemsPerPage + ',  iSkipRecs=' + iSkipRecs + ', iFirstLine=' + iFirstLine);
+
+                if (iLine >= iFirstLine && iCountRecs < iItemsPerPage) {
+                    iCountRecs += 1;
+                    row += '<tr><td>' + iLine + '</td>' +
+                        '<td>' + item.Description + '</td>' +
+                        '<td>' + item.Code + '</td>' +
+                        '<td  class="text-right">' + item.Units + '</td>' +
+                        '<td  class="text-right">' + item.Unit_Amount.toFixed(2) + '</td>' +
+                        '<td  class="text-right">' + (item.Units * item.Unit_Amount).toFixed(2) + '</td>';
+
+                    row += '<td>';
+                    //row += '<a href="javascript:void(0);" class="nav-link openEditGridItem" data-href="testHref" data-area="' + item.ID + '">Edit</a>';
+                    //row += '<button type="button" class="btn  btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">EditButton</button>';
+                    row += '<a class="paging openEditGridItem" data-page="X" href="javascript:void(0);" onclick="editGridItemPartial(' + item.ID + ')">Edit | </a>';
+                    row += '<a href="javascript:void(0);" onclick="deleteGridItem(' + item.ID + ')" >Delete</a>';
+                    row += '</td></tr>';
+                }
+            });
+
+            row += '     </tbody>';
+            row += '  </table>';
+            row += '<div>';
+
+            $("#gridResults").html(row);
+
+        });
+
+    }
+</script>
+
+
+
+@*<style>
+    label, input {
+        display: block;
+    }
+
+        input.text {
+            margin-bottom: 12px;
+            width: 95%;
+            padding: .4em;
+        }
+
+    fieldset {
+        padding: 0;
+        border: 0;
+        margin-top: 25px;
+    }
+
+    h1 {
+        font-size: 1.2em;
+        margin: .6em 0;
+    }
+
+    div#users-contain {
+        width: 350px;
+        margin: 20px 0;
+    }
+
+        div#users-contain table {
+            margin: 1em 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            div#users-contain table td, div#users-contain table th {
+                border: 1px solid #eee;
+                padding: .6em 10px;
+                text-align: left;
+            }
+
+    .ui-dialog .ui-state-error {
+        padding: .3em;
+    }
+
+    .validateTips {
+        border: 1px solid transparent;
+        padding: 0.3em;
+    }
+</style>*@
+
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+@*<script>
+    $(function () {
+        var dialog, form,
+
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Create an account": addUser,
+                    Cancel: function () {
+                        dialog.dialog("close");
+                    }
+                },
+                close: function () {
+                    form[0].reset();
+                    allFields.removeClass("ui-state-error");
+                }
+            });
+
+        //form = dialog.find("form").on("submit", function (event) {
+        //    event.preventDefault();
+        //    addUser();
+        //});
+
+    });
+</script>*@

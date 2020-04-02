@@ -1,0 +1,100 @@
+﻿@model IEnumerable<NetNotes.Models.VisitWorkModel>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+
+
+@if (false)
+{
+    Layout = null;
+    WebGrid webGrid = new WebGrid(source: Model);
+    <div>
+        @webGrid.GetHtml(
+            htmlAttributes: new { @id = "WebGrid", @class = "Grid" },
+            columns: webGrid.Columns(
+                    webGrid.Column("Exercise_Modality_Description", "Exercise Modality Description"),
+                    webGrid.Column("Sets", "Sets"),
+                    webGrid.Column("Reps", "Reps"),
+                    webGrid.Column("Weight", "Weight"),
+                    webGrid.Column("Duration", "Duration")))
+
+    </div>
+
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Exercise_Modality_Description)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Sets_Reps_Weight)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Label)
+                </th>*@
+
+            <th>
+                @Html.DisplayNameFor(model => model.On_Hold)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sets)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reps)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exercise_Modality_Description)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Sets_Reps_Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Label)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.On_Hold)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sets)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reps)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Duration)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+}
+
+
+
+

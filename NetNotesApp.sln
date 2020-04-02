@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetNotes", "NetNotes\NetNotes.csproj", "{9BF9B2E4-1B6B-4FBB-84C9-6694A39FDA20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\DataLibrary.csproj", "{732FC388-8C21-469D-9463-5F776E6D7EB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9BF9B2E4-1B6B-4FBB-84C9-6694A39FDA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9BF9B2E4-1B6B-4FBB-84C9-6694A39FDA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9BF9B2E4-1B6B-4FBB-84C9-6694A39FDA20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{732FC388-8C21-469D-9463-5F776E6D7EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{732FC388-8C21-469D-9463-5F776E6D7EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{732FC388-8C21-469D-9463-5F776E6D7EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{732FC388-8C21-469D-9463-5F776E6D7EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

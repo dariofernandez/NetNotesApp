@@ -1,0 +1,143 @@
+﻿@model NetNotes.Models.ViewNotesModel
+@using NetNotes.Class
+
+
+<div class="row">
+
+    <!-- LIST -->
+    <div class="col-md-3">
+
+        <!-- Quick Search -->
+        <div class="listItemsDiv">
+            <table>
+                <tbody>
+                    <tr>
+
+                        @using (Html.BeginForm("Search", "ViewNotes", new { searchString = @ViewData["currentFilter"] }))
+                        {
+                            <td><input type="text" name="searchString" value="@ViewData["currentFilter"]" /></td>
+                            <td>
+                                @*<input type="image" src="~/Content/Image/delete-icon.png" />*@
+                                <button id="submitButton" type="submit">Search</button>
+                            </td>
+                        }
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br />
+
+        @{
+            List<SelectListItem> patientList = new List<SelectListItem>();
+            patientList = ViewBag.PatientList;
+
+            if (patientList.Count > 0)
+            {
+                <div class="listItemsDiv">
+                    <table class="table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("Patient")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("ID")
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in patientList)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Text)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Value)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("SelectedPatient", Model.ControllerInvoking, new { id=item.Value, name=item.Text })" onclick="SetName();">Select</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+
+                        <tbody>
+                            @foreach (var item in patientList)
+                            {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Text)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Text)</td>
+
+                                <td>
+                                    <a href="@Url.Action("SelectedPatient",Model.ControllerInvoking,
+                                                new { id=item.Value, name=item.Text })" onclick="SetName();">Select</a>
+
+                                </td>
+                            </tr>
+                            }
+
+                            @for (var i = 0; i < 10 - patientList.Count; i++)
+                            {
+                                <tr><td>&nbsp;</td></tr>
+                            }
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="pagingDiv">
+
+                                        @Html.PageLinks((PagingInfo)ViewBag.Paging, x => Url.Action("Index", Model.ControllerInvoking,
+                                       new {
+                                           LeaveModalOpen = "true",
+                                           page = x
+                                       }))
+                                    </div>
+
+
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#payer").DataTable({
+
+            });
+        });
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            alert("hidden called");
+        })
+    </script>
+
+    <script type="text/javascript">
+        function SetName() {
+            if (window.opener != null && !window.opener.closed) {
+                var txtName = window.opener.document.getElementById("searchPatient");
+                txtName.value = document.getElementById('name').value;
+            }
+            window.close();
+        }
+    </script>
+}
+
+

@@ -189,25 +189,54 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Class\LogActionFilter.cs" />
+    <Compile Include="Class\PagingHelper.cs" />
+    <Compile Include="Class\PagingInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NavigationController.cs" />
+    <Compile Include="Controllers\PatientSelectionController.cs" />
+    <Compile Include="Controllers\PeopleController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\TrainingController.cs" />
+    <Compile Include="Controllers\ViewNotesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AnySelectListModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ITrainingRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MenuViewModel.cs" />
+    <Compile Include="Models\PatientModel.cs" />
+    <Compile Include="Models\PatientSelectionModel.cs" />
+    <Compile Include="Models\PatientVisitsBillingModel.cs" />
+    <Compile Include="Models\PeopleModel.cs" />
+    <Compile Include="Models\StudentModel.cs" />
+    <Compile Include="Models\Training.cs" />
+    <Compile Include="Models\TrainingRepository.cs" />
+    <Compile Include="Models\ViewNotesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Trainings.xml" />
+    <Content Include="Content\appcss\custom-style.css" />
+    <Content Include="Content\appcss\jquery.timepicker.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\appjs\create.partialview.js" />
+    <Content Include="Scripts\appjs\edit.partialview.js" />
+    <Content Include="Scripts\appjs\index.js" />
+    <Content Include="Scripts\appjs\jquery.timepicker.min.js" />
+    <Content Include="Scripts\appjs\notes.partialview.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -224,6 +253,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Styles\GridStyleSheet.css" />
+    <Content Include="Styles\PagingStyleSheet.css" />
+    <Content Include="Styles\StudentStyleSheet.css" />
+    <Content Include="Views\Shared\NotesPartialView.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -258,9 +291,25 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\People\Index.cshtml" />
+    <Content Include="Views\People\ListPeople.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\ViewNotes\Index.cshtml" />
+    <Content Include="Views\Shared\_HeaderNavBar.cshtml" />
+    <Content Include="Views\Shared\_SelectVisit.cshtml" />
+    <Content Include="Views\Shared\_NavMenuNotes.cshtml" />
+    <Content Include="Views\Shared\_HorizontalTabs.cshtml" />
+    <Content Include="Views\PatientSelection\Index.cshtml" />
+    <Content Include="Views\Training\Index.cshtml" />
+    <Content Include="Views\ViewNotes\GetNotesPartialView.cshtml" />
+    <Content Include="Views\ViewNotes\GetWorkPartialView.cshtml" />
+    <Content Include="Views\ViewNotes\GetBillingPartialView.cshtml" />
+    <Content Include="Views\Grid\Index.cshtml" />
+    <Content Include="Views\ViewNotes\GetBillingPartialViewOneItem.cshtml" />
+    <Content Include="Views\Shared\_ViewModalDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="Views\Navigation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -274,6 +323,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataLibrary\DataLibrary.csproj">
+      <Project>{732fc388-8c21-469d-9463-5f776e6d7eb2}</Project>
+      <Name>DataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

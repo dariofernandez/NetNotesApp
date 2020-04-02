@@ -1,0 +1,42 @@
+﻿@model IList<NetNotes.Models.MenuViewModel>
+
+@*<div class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dropdown trigger</a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li><a href="#">Item</a></li>
+        </ul>
+    </div>*@
+
+@*<li>
+        @Html.ActionLink("NotesLink", "NotesPartialView", "ViewNotes", new { area = "" }, new { @class = "nav-link" })
+    </li>*@
+
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link openDialog" data-href="testinHref" data-area="Note">Note</a>
+    </li>
+
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link openDialog" data-href="testinHref" data-area="Work">Work</a>
+    </li>
+
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link openDialog" data-href="testinHref" data-area="OF">Obj Findings</a>
+    </li>
+
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link disabled openDialog" data-href="testinHref" data-area="Goals">Disabled</a>
+    </li>
+
+
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link openDialogGrid" data-href="testinHref" data-area="Test">GridTest</a>
+    </li>
+
+    <li class="nav-item">
+        <a href="javascript:void(0);" class="nav-link openDialog" data-href="testinHref" data-area="Billing">Billing</a>
+    </li>
+</ul>
+
+

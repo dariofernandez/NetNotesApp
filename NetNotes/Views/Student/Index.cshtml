@@ -1,0 +1,243 @@
+﻿@model NetNotes.Models.StudentModel
+@{
+    ViewBag.Title = "Index";
+}
+
+@using NetNotes.Class
+
+<h5>Student</h5>
+
+<h5>@TempData["Result"]</h5>
+
+@*========================================================================================================================*@
+
+<div class="row">
+
+    <!-- LIST -->
+    <div class="col-md-3">
+
+        <!-- Quick Search -->
+        <div class="listItemsDiv">
+            <table>
+                <tbody>
+                    <tr>
+
+                        @using (Html.BeginForm("Search", "Student", new { searchString = @ViewData["currentFilter"] }))
+                        {
+                            <td><input type="text" name="searchString" value="@ViewData["currentFilter"]" /></td>
+                            <td>
+                                @*<input type="image" src="~/Content/Image/delete-icon.png" />*@
+                                <button id="submitButton" type="submit">Search</button>
+                            </td>
+                        }
+
+                    </tr>
+                    @*<tr>
+                            <form asp-action="Index" method="get">
+                                <div class="form-actions no-color">
+                                    <p>
+                                        Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                                        <input type="submit" value="Search" class="btn btn-default" /> |
+                                        <a asp-action="Index">Back to Full List</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </tr>*@
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <br />
+
+        @{
+            List<NetNotes.Models.StudentModel> mStudentListX = new List<NetNotes.Models.StudentModel>();
+            mStudentListX = ViewBag.StudentList;
+
+            if (mStudentListX.Count > 0)
+            {
+                <div class="listItemsDiv">
+                    <table class="table-striped table-hover">
+
+                        <tbody>
+
+                            @*<tr><td colspan="2">&nbsp;</td></tr>*@
+
+                            @foreach (NetNotes.Models.StudentModel student in ViewBag.StudentList)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    @*<td>@student.name</td>*@
+                                    <td><a href="@Url.Action("Index","Student",new { id=student.id })">@student.name</a></td>
+                                </tr>
+                            }
+
+                            @for (var i = 0; i < 10 - ViewBag.StudentList.Count; i++)
+                            {
+                                <tr><td>&nbsp;</td></tr>
+                            }
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="pagingDiv">
+                                        @Html.PageLinks((PagingInfo)ViewBag.Paging, x => Url.Action("Index", "Student", new { page = x }))
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+
+
+    <!-- DETAIL -->
+    <div class="col-md-6 detailItemDiv">
+
+        <h4>@ViewBag.Operation</h4>
+
+        <div>
+            @using (Html.BeginForm())
+            {
+                <table>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.status)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.status, new List<SelectListItem> { new SelectListItem { Text = "Select", Value = "Select" }, new SelectListItem { Text = "Active", Value = "True" }, new SelectListItem { Text = "InActive", Value = "False" } })
+                            @Html.ValidationMessageFor(model => model.status)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.name)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.name)
+                            @Html.ValidationMessageFor(model => model.name)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.age)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.age)
+                            @Html.ValidationMessageFor(model => model.age)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.standard)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.standard)
+                            @Html.ValidationMessageFor(model => model.standard)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.percent)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.percent)
+                            @Html.ValidationMessageFor(model => model.percent)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.address)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.address)
+                            @Html.ValidationMessageFor(model => model.address)
+                        </td>
+                    </tr>
+
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td colspan="2"><button id="submitButton" type="submit">Submit</button></td></tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+
+@*========================================================================================================================*@
+
+<p></p>
+<br />
+
+@{
+    List<NetNotes.Models.StudentModel> mStudentList = new List<NetNotes.Models.StudentModel>();
+    mStudentList = ViewBag.StudentList;
+
+    if (mStudentList.Count > 0)
+    {
+        <div class="studentDiv">
+            <table class="table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <td>Id</td>
+                        <td>Name</td>
+                        <td>Address</td>
+                        <td>Age</td>
+                        <td>Standard</td>
+                        <td>Percent</td>
+                        <td>Added On</td>
+                        <td>Status</td>
+                        <td>Edit</td>
+                        <td>Delete</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (NetNotes.Models.StudentModel student in ViewBag.StudentList)
+                    {
+                        <tr>
+                            <td>@student.id</td>
+                            <td>@student.name</td>
+                            <td>@student.address</td>
+                            <td>@student.age</td>
+                            <td>@student.standard</td>
+                            <td>@student.percent</td>
+                            <td>@student.addedOn</td>
+                            <td>@student.status</td>
+                            <td><a href="@Url.Action("Index","Student",new { id=student.id })"><img src="~/Content/Image/edit-icon.png" /></a></td>
+                            <td>
+                                @using (Html.BeginForm("Delete", "Student", new { id = student.id }))
+                                {
+                                    <input type="image" src="~/Content/Image/delete-icon.png" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10">
+                            <div class="pagingDiv">
+                                @Html.PageLinks((PagingInfo)ViewBag.Paging, x => Url.Action("Index", "Student", new { page = x }))
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    }
+}
+
+
+@section Styles {
+    <link href="@Url.Content("~/Styles/StudentStyleSheet.css")" rel="stylesheet" type="text/css" />
+}
+

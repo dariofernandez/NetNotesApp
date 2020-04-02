@@ -1,0 +1,216 @@
+﻿@model NetNotes.Models.ViewNotesModel
+@{
+    ViewBag.Title = "Index";
+    //ViewBag.TabOption = 5;  set in ViewNotesController Index action
+    //Model.VisitDate = Convert.ToDateTime("2020-03-13");
+}
+
+<h2>Patient Notes</h2>
+
+
+<div class="row">
+
+    <div class="col-md-9">
+        @if ((Model.PatientWasSelected == true && Model.VisitWasSelected == false))
+        {
+            <div class="modal fade" id="myModalVisit" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal Visit</h4>
+                        </div>
+                        <div class="modal-body">
+                            @{ Html.RenderPartial("_SelectVisit"); }
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.Label("Patient:")
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.Name, new
+                        {
+                            @readonly = "readonly",
+                            @id = "searchPatient",
+                            data_toggle = "modal",
+                            data_target = "#myModal",
+                            data_backdrop = "static",
+                            data_keyboard = "false",
+                            @Value = Session["patientName"]
+                        })
+                        @Html.ValidationMessageFor(m => m.Name)
+
+                    </td>
+
+                    <td>
+                        @using (Html.BeginForm("Index", "PatientSelection", new { parentController = "ViewNotes", searchString = "" }))
+                        {
+                            <button id="submitButton" type="submit">Select</button>
+                        }
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("ClearSearch", "ViewNotes", new { searchString = "" }))
+                        {
+                            <button id="submitButton" type="submit">Clear</button>
+                        }
+                    </td>
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        @Html.Label("Visit Date")
+                    </td>
+
+                    <td>
+                        @Html.TextBoxFor(m => m.VisitDate, new
+                        {
+                            @readonly = "readonly",
+                            @id = "searchVisit",
+                            data_toggle = "modal",
+                            data_target = "#myModalVisit",
+                            data_backdrop = "static",
+                            data_keyboard = "false",
+                            @Value = Session["visitDate"]
+                        })
+                        @Html.ValidationMessageFor(m => m.VisitDate)
+                    </td>
+
+                    <td>
+                        @*<button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal">Open Modal</button>*@
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+
+@Html.Action("HorizontalTabs", "Navigation")
+
+
+
+<div class="row">
+    <div id="partialViewDiv" class="col-md-12"></div>
+</div>
+
+
+<div id="createForm"></div>
+
+@Html.Action("MyModalDialog", "Navigation", new { DialogName = "Dario" })
+
+
+
+@section Scripts{
+    @*<script>
+            $(document).ready(function () {
+
+                $('.openDialogGrid').on('click', function () {
+                    var sUrl = "@Url.Action("Index","Grid")";
+                    alert('sUrl=' + sUrl);
+                    var model = @Model; //
+                    $.post(sUrl, model, function (res) {
+                        //res contains the markup returned by the partial view
+                        //You probably want to set that to some Div.
+                        //$("#SomeDivToShowTheResult").html(res);
+                    });
+                });
+            }
+        </script>*@
+
+    <script>
+
+        //https://visualstudiomagazine.com/articles/2015/07/01/generate-reliable-urls.aspx
+        $(document).ready(function () {
+
+            var iTabOption = @ViewBag.TabOption;
+            //alert('iTabOption=' + iTabOption);
+            SelectTab(iTabOption);
+
+            $('.openDialog').on('click', function () {      // called by the tabs in _horizontal
+                var dataURL = $(this).attr('data-href');
+                var dataArea = $(this).attr('data-area');
+                var iTabOption = 1;
+                switch (dataArea) {
+                    case 'Note':
+                        //sUrl = '@Url.Action("GetNotesPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        iTabOption = 1;
+                        break;
+                    case 'Work':
+                        //sUrl = '@Url.Action("GetWorkPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        iTabOption = 2;
+                        break;
+                    case 'Billing':
+                        //sUrl = '@Url.Action("GetBillingPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        iTabOption = 5;
+                        break;
+                    default:
+                }
+
+                SelectTab(iTabOption);
+            });
+
+            function SelectTab(iTabOption=1) {
+                if (@Session["visitID"] == null) {
+                    alert('visit id is null');
+                }
+                var sUrl = '';
+
+                //sUrl = "/ViewNotes/GetPartialViewAction/";  // works
+                switch (iTabOption) {
+                    case 1:
+                        sUrl = '@Url.Action("GetNotesPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        break;
+                    case 2:
+                        sUrl = '@Url.Action("GetWorkPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        break;
+                    case 5:
+                        sUrl = '@Url.Action("GetBillingPartialView", "ViewNotes", new  { visitId = Session["visitID"] }, Request.Url.Scheme)';
+                        break;
+                    default:
+                }
+ 
+                $.ajax({
+                    url: sUrl
+                }).done(function (data) {
+                    $("#partialViewDiv").html(data);
+                });
+            }
+
+        });
+
+    </script>
+
+
+    @*<script src="~/Scripts/appjs/index.js"></script>*@
+
+}
+
+@section Styles {
+    <link href="@Url.Content("~/Styles/StudentStyleSheet.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Styles/GridStyleSheet.css")" rel="stylesheet" type="text/css" />
+}

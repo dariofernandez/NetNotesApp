@@ -1,0 +1,78 @@
+﻿@model IEnumerable<NetNotes.Models.PeopleModel>
+
+@{
+    ViewBag.Title = "ListPeople";
+}
+
+<h2>ListPeople</h2>
+
+<div id="menucontainer">
+    <ul id="menu">
+        <li>
+            @Html.ActionLink("Notes", "Index", "ViewNotes", new { title = "Notes" }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Work", "Work", "Notes", new { title = "Work" }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Obj.Findings", "OF", "Notes", new { title = "Objective Findings" }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Goals", "Goals", "Notes", new { title = "Goals" }, null)
+        </li>
+    </ul>
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.biography)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.addedOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.biography)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.addedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("menucontainer").tabs();
+        });
+
+    </script>
+}
